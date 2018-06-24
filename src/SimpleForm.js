@@ -1,6 +1,36 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
+
+function validate(values) {
+  const errors = {}
+  if (!values.firstName) {
+    errors.firstName = 'Required'
+  }
+  if (!values.lastName) {
+    errors.lastName = 'Required'
+  }
+  if (!values.email) {
+    errors.email = 'Required'
+  }
+  return errors
+}
+
+const renderField = ({
+  input,
+  label,
+  type,
+  meta: { touched, error }
+}) => (
+  <div>
+    <label>{label}</label>
+    <div>
+      <input {...input} placeholder={label} type={type} />
+        {touched && error && <span>{error}</span>}
+    </div>
+  </div>
+)
+
 const SimpleForm = props => {
   const { handleSubmit, pristine, reset, submitting } = props;
   return (
@@ -10,9 +40,8 @@ const SimpleForm = props => {
         <div>
           <Field
             name="firstName"
-            component="input"
+            component={renderField}
             type="text"
-            placeholder="First Name"
           />
         </div>
       </div>
@@ -21,9 +50,8 @@ const SimpleForm = props => {
         <div>
           <Field
             name="lastName"
-            component="input"
+            component={renderField}
             type="text"
-            placeholder="Last Name"
           />
         </div>
       </div>
@@ -32,9 +60,8 @@ const SimpleForm = props => {
         <div>
           <Field
             name="email"
-            component="input"
+            component={renderField}
             type="email"
-            placeholder="Email"
           />
         </div>
       </div>
@@ -93,4 +120,5 @@ const SimpleForm = props => {
 
 export default reduxForm({
   form: 'simple', // a unique identifier for this form
+  validate 
 })(SimpleForm);
